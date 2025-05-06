@@ -24,13 +24,13 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 CLOUDFLARE+NEXT.JS+PRISMA でデプロイするための手順です。
 
-Next.js のインストール(いったんバージョン 14)
+### Next.js のインストール(いったんバージョン 14)
 
 ```bash
 npx create-next-app@14
 ```
 
-CLOUDFLARE でデプロイするための特有のライブラリをインストール
+### CLOUDFLARE でデプロイするための特有のライブラリをインストール
 
 ```bash
 npm install @opennextjs/cloudflare wrangler
@@ -40,15 +40,40 @@ package.json の scripts に以下のコマンドを追加
 
 ```json:package.json
 "scripts": {
-    "dev"や"build"...
+    // "dev"や"build"...
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
 },
 ```
 
+ルートディレクトリに open-next.config.ts を作成
+
+```typescript:open-next.config.ts
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+
+export default defineCloudflareConfig();
+```
+
+ルートディレクトリに wrangler.jsonc を作成
+
+```jsonc:wrangler.jsonc
+{
+  "main": ".open-next/worker.js",
+  "name": "cf-nextjs-prisma", //ここだけいい感じのプロジェクト名に変更
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  }
+}
+
+```
+
+### CLOUDFLARE にデプロイ
+
 ここまで来たら GITHUB にプッシュ。
-その後 CLOUDFLARE でデプロイ
 
 CLOUDFLARE 管理画面＞コンピューティング＞ Workers＆Pages ＞作成＞ Import a repository
 
