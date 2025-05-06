@@ -1,6 +1,6 @@
 {
   "main": ".open-next/worker.js",
-  "name": "cf-nextjs-prisma",
+  "name": "cf-next-prisma",
   "compatibility_date": "2025-03-25",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
